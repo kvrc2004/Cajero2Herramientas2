@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - Banco Futuro Seguro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>Banco Futuro Seguro</h1>
+    <nav>
+        <a href="index.html#servicios">Servicios</a>
+        <a href="acerca.html">Acerca de</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="login.html">Iniciar Sesión</a>
+        <a href="registro.html">Registrarse</a>
+    </nav>
+</header>
+<div class="main-content">
+    <section>
+        <h2>Registrarse</h2>
+        <form class="formulario" id="registroForm" action="#" method="post">
+            <label for="register-name">Nombre:</label>
+            <input type="text" id="register-name" name="register-name" required>
+            <label for="register-email">Email:</label>
+            <input type="email" id="register-email" name="register-email" required>
+            <label for="register-password">Contraseña:</label>
+            <input type="password" id="register-password" name="register-password" required>
+            <button type="submit" class="button">Registrarse</button>
+        </form>
+    </section>
+</div>
+<footer>
+    <p>&copy; 2023 Banco Futuro Seguro. Todos los derechos reservados.</p>
+    <div>
+        Síguenos:
+        <a href="https://facebook.com/proyectobancario" target="_blank" title="Facebook">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="width:24px;vertical-align:middle;">
+        </a>
+        <a href="https://twitter.com/proyectobancario" target="_blank" title="Twitter">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="width:24px;vertical-align:middle;">
+        </a>
+        <a href="https://instagram.com/proyectobancario" target="_blank" title="Instagram">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="width:24px;vertical-align:middle;">
+        </a>
+    </div>
+</footer>
+<script>
+document.getElementById('registroForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('register-name').value;
+    const email = document.getElementById('register-email').value;
+    const password = document.getElementById('register-password').value;
+
+    let usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+    // Verifica si el email ya está registrado
+    if (usuarios.some(u => u.email === email)) {
+        alert('Este email ya está registrado.');
+        return;
+    }
+    usuarios.push({ nombre, email, password });
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+    alert('Registro exitoso. Ahora puedes iniciar sesión.');
+    window.location.href = 'login.html';
+});
+</script>
+</body>
+</html>
