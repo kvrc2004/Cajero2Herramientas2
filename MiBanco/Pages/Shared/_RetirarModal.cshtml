@@ -1,0 +1,74 @@
+<!-- Modal para Retirar Dinero -->
+<div class="modal fade" id="retirarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-minus-circle me-2"></i>
+                    Retirar Dinero
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formRetirar">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-university me-1"></i>
+                            Cuenta origen
+                        </label>
+                        <select class="form-select" id="cuentaRetirar" required>
+                            <option value="">Selecciona una cuenta</option>
+                            @foreach (var cuenta in Model.ClienteLogueado!.Cuentas)
+                            {
+                                <option value="@cuenta.Id" data-saldo="@cuenta.Saldo" data-tipo="@cuenta.GetType().Name">
+                                    @cuenta.ObtenerTipoCuenta() - @cuenta.NumeroCuenta 
+                                    @if (cuenta is MiBanco.Models.TarjetaCredito tarjeta)
+                                    {
+                                        <text>(Disponible: $@tarjeta.CreditoDisponible.ToString("N0"))</text>
+                                    }
+                                    else if (cuenta is MiBanco.Models.CuentaCorriente corriente)
+                                    {
+                                        var disponible = corriente.Saldo + corriente.ObtenerSobregiroDisponible();
+                                        <text>(Disponible: $@disponible.ToString("N0"))</text>
+                                    }
+                                    else
+                                    {
+                                        <text>(Saldo: $@cuenta.Saldo.ToString("N0"))</text>
+                                    }
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-dollar-sign me-1"></i>
+                            Monto a retirar
+                        </label>
+                        <input type="number" class="form-control" id="montoRetirar" 
+                               min="1" step="0.01" placeholder="0.00" required>
+                        <div class="form-text" id="infoDisponible">Selecciona una cuenta para ver el monto disponible</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-comment me-1"></i>
+                            Descripción (opcional)
+                        </label>
+                        <input type="text" class="form-control" id="descripcionRetirar" 
+                               placeholder="Descripción del retiro" maxlength="200">
+                    </div>
+                    
+                    <div id="resultadoRetirar" class="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-check me-2"></i>
+                        Retirar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

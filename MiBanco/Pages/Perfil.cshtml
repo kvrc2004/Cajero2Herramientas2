@@ -1,0 +1,226 @@
+@page
+@model MiBanco.Pages.PerfilModel
+@{
+    ViewData["Title"] = "Mi Perfil - Mi Plata";
+}
+
+<div class="container py-4">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-user-cog me-2"></i>
+                        Mi Perfil
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <!-- Pestañas -->
+                    <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">
+                                <i class="fas fa-user me-1"></i>
+                                Información Personal
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="clave-tab" data-bs-toggle="tab" data-bs-target="#clave" type="button" role="tab">
+                                <i class="fas fa-key me-1"></i>
+                                Cambiar Clave
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="cuentas-tab" data-bs-toggle="tab" data-bs-target="#cuentas" type="button" role="tab">
+                                <i class="fas fa-credit-card me-1"></i>
+                                Mis Cuentas
+                            </button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content mt-3" id="perfilTabContent">
+                        <!-- Información Personal -->
+                        <div class="tab-pane fade show active" id="info" role="tabpanel">
+                            <form method="post" asp-page-handler="ActualizarPerfil">
+                                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                                
+                                @if (!string.IsNullOrEmpty(Model.PerfilViewModel.MensajeError))
+                                {
+                                    <div class="alert alert-danger" role="alert">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        @Model.PerfilViewModel.MensajeError
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.PerfilViewModel.MensajeExito))
+                                {
+                                    <div class="alert alert-success" role="alert">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        @Model.PerfilViewModel.MensajeExito
+                                    </div>
+                                }
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="PerfilViewModel.Identificacion" class="form-label">
+                                            <i class="fas fa-id-card me-1"></i>
+                                            Identificación
+                                        </label>
+                                        <input asp-for="PerfilViewModel.Identificacion" class="form-control" readonly />
+                                        <div class="form-text">La identificación no se puede modificar</div>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="PerfilViewModel.Usuario" class="form-label">
+                                            <i class="fas fa-user me-1"></i>
+                                            Usuario
+                                        </label>
+                                        <input asp-for="PerfilViewModel.Usuario" class="form-control" />
+                                        <span asp-validation-for="PerfilViewModel.Usuario" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="PerfilViewModel.Nombre" class="form-label">
+                                        <i class="fas fa-user me-1"></i>
+                                        Nombre Completo
+                                    </label>
+                                    <input asp-for="PerfilViewModel.Nombre" class="form-control" />
+                                    <span asp-validation-for="PerfilViewModel.Nombre" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="PerfilViewModel.Celular" class="form-label">
+                                        <i class="fas fa-mobile-alt me-1"></i>
+                                        Celular
+                                    </label>
+                                    <input asp-for="PerfilViewModel.Celular" class="form-control" />
+                                    <span asp-validation-for="PerfilViewModel.Celular" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-save me-2"></i>
+                                        Actualizar Información
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Cambiar Clave -->
+                        <div class="tab-pane fade" id="clave" role="tabpanel">
+                            <form method="post" asp-page-handler="CambiarClave">
+                                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                                
+                                @if (!string.IsNullOrEmpty(Model.CambioClaveViewModel.MensajeError))
+                                {
+                                    <div class="alert alert-danger" role="alert">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        @Model.CambioClaveViewModel.MensajeError
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.CambioClaveViewModel.MensajeExito))
+                                {
+                                    <div class="alert alert-success" role="alert">
+                                        <i class="fas fa-check-circle me-2"></i>
+                                        @Model.CambioClaveViewModel.MensajeExito
+                                    </div>
+                                }
+
+                                <div class="mb-3">
+                                    <label asp-for="CambioClaveViewModel.Usuario" class="form-label">
+                                        <i class="fas fa-user me-1"></i>
+                                        Usuario
+                                    </label>
+                                    <input asp-for="CambioClaveViewModel.Usuario" class="form-control" />
+                                    <span asp-validation-for="CambioClaveViewModel.Usuario" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="CambioClaveViewModel.ClaveActual" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>
+                                        Clave Actual
+                                    </label>
+                                    <input asp-for="CambioClaveViewModel.ClaveActual" class="form-control" />
+                                    <span asp-validation-for="CambioClaveViewModel.ClaveActual" class="text-danger"></span>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CambioClaveViewModel.NuevaClave" class="form-label">
+                                            <i class="fas fa-key me-1"></i>
+                                            Nueva Clave
+                                        </label>
+                                        <input asp-for="CambioClaveViewModel.NuevaClave" class="form-control" />
+                                        <span asp-validation-for="CambioClaveViewModel.NuevaClave" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CambioClaveViewModel.ConfirmarNuevaClave" class="form-label">
+                                            <i class="fas fa-key me-1"></i>
+                                            Confirmar Nueva Clave
+                                        </label>
+                                        <input asp-for="CambioClaveViewModel.ConfirmarNuevaClave" class="form-control" />
+                                        <span asp-validation-for="CambioClaveViewModel.ConfirmarNuevaClave" class="text-danger"></span>
+                                    </div>
+                                </div>
+
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-key me-2"></i>
+                                        Cambiar Clave
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Mis Cuentas -->
+                        <div class="tab-pane fade" id="cuentas" role="tabpanel">
+                            <div class="row">
+                                @foreach (var cuenta in Model.ClienteLogueado!.Cuentas)
+                                {
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                @if (cuenta is MiBanco.Models.CuentaAhorros)
+                                                {
+                                                    <i class="fas fa-piggy-bank me-2 text-success"></i>
+                                                }
+                                                else if (cuenta is MiBanco.Models.CuentaCorriente)
+                                                {
+                                                    <i class="fas fa-exchange-alt me-2 text-info"></i>
+                                                }
+                                                else if (cuenta is MiBanco.Models.TarjetaCredito)
+                                                {
+                                                    <i class="fas fa-credit-card me-2 text-warning"></i>
+                                                }
+                                                <strong>@cuenta.ObtenerTipoCuenta()</strong>
+                                            </div>
+                                            <div class="card-body">
+                                                <p><strong>Número:</strong> @cuenta.NumeroCuenta</p>
+                                                <p><strong>Fecha creación:</strong> @cuenta.FechaCreacion.ToString("dd/MM/yyyy")</p>
+                                                <p><strong>Movimientos:</strong> @cuenta.Movimientos.Count</p>
+                                                <hr>
+                                                <small class="text-muted">@cuenta.ObtenerInformacionEspecifica()</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-page="/Transacciones" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Volver a Transacciones
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

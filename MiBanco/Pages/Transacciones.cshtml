@@ -1,0 +1,204 @@
+@page
+@model MiBanco.Pages.TransaccionesModel
+@{
+    ViewData["Title"] = "Transacciones - Mi Plata";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="display-6">
+                    <i class="fas fa-credit-card me-2 text-primary"></i>
+                    Mis Transacciones
+                </h1>
+                <div class="text-end">
+                    <small class="text-muted">Último acceso: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen de Cuentas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-3">
+                <i class="fas fa-wallet me-2"></i>
+                Mis Cuentas
+            </h3>
+        </div>
+        @foreach (var cuenta in Model.ClienteLogueado!.Cuentas)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="account-card @(cuenta.GetType().Name.ToLower())">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title">
+                                @if (cuenta is MiBanco.Models.CuentaAhorros)
+                                {
+                                    <i class="fas fa-piggy-bank me-2 text-success"></i>
+                                }
+                                else if (cuenta is MiBanco.Models.CuentaCorriente)
+                                {
+                                    <i class="fas fa-exchange-alt me-2 text-info"></i>
+                                }
+                                else if (cuenta is MiBanco.Models.TarjetaCredito)
+                                {
+                                    <i class="fas fa-credit-card me-2 text-warning"></i>
+                                }
+                                @cuenta.ObtenerTipoCuenta()
+                            </h5>
+                            <p class="card-text">
+                                <strong>Número:</strong> @cuenta.NumeroCuenta<br>
+                                <small class="text-muted">@cuenta.ObtenerInformacionEspecifica()</small>
+                            </p>
+                        </div>
+                        <div class="text-end">
+                            <h4 class="text-primary mb-0">
+                                @if (cuenta is MiBanco.Models.TarjetaCredito tarjeta)
+                                {
+                                    if (tarjeta.TieneDeuda())
+                                    {
+                                        <span class="text-danger">-$@tarjeta.ObtenerDeuda().ToString("N0")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success">$0</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="@(cuenta.Saldo >= 0 ? "text-success" : "text-danger")">
+                                        $@cuenta.Saldo.ToString("N0")
+                                    </span>
+                                }
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Botones de Transacciones -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-3">
+                <i class="fas fa-exchange-alt me-2"></i>
+                Operaciones Disponibles
+            </h3>
+        </div>
+        <div class="col-12">
+            <div class="transaction-buttons">
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#consultarSaldoModal">
+                    <i class="fas fa-search-dollar text-info"></i>
+                    <strong>Consultar Saldo</strong>
+                    <small>Ver saldo detallado</small>
+                </a>
+                
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#consignarModal">
+                    <i class="fas fa-plus-circle text-success"></i>
+                    <strong>Consignar</strong>
+                    <small>Depositar dinero</small>
+                </a>
+                
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#retirarModal">
+                    <i class="fas fa-minus-circle text-danger"></i>
+                    <strong>Retirar</strong>
+                    <small>Retirar dinero</small>
+                </a>
+                
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#transferirModal">
+                    <i class="fas fa-exchange-alt text-primary"></i>
+                    <strong>Transferir</strong>
+                    <small>Enviar dinero</small>
+                </a>
+                
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#movimientosModal">
+                    <i class="fas fa-history text-secondary"></i>
+                    <strong>Ver Movimientos</strong>
+                    <small>Historial de transacciones</small>
+                </a>
+                
+                <a href="#" class="transaction-btn" data-bs-toggle="modal" data-bs-target="#comprasCuotasModal">
+                    <i class="fas fa-shopping-cart text-warning"></i>
+                    <strong>Compras en Cuotas</strong>
+                    <small>Tarjeta de crédito</small>
+                </a>
+                
+                <a asp-page="/Perfil" class="transaction-btn">
+                    <i class="fas fa-user-cog text-info"></i>
+                    <strong>Perfil</strong>
+                    <small>Editar información</small>
+                </a>
+                
+                <a asp-page="/Logout" class="transaction-btn">
+                    <i class="fas fa-sign-out-alt text-dark"></i>
+                    <strong>Salir</strong>
+                    <small>Cerrar sesión</small>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Últimos Movimientos -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-3">
+                <i class="fas fa-clock me-2"></i>
+                Últimos Movimientos
+            </h3>
+            <div class="card">
+                <div class="card-body">
+                    @{
+                        var ultimosMovimientos = Model.ClienteLogueado.Cuentas
+                            .SelectMany(c => c.Movimientos)
+                            .OrderByDescending(m => m.Fecha)
+                            .Take(5);
+                    }
+                    
+                    @if (ultimosMovimientos.Any())
+                    {
+                        @foreach (var movimiento in ultimosMovimientos)
+                        {
+                            <div class="movement-item @(movimiento.EsCredito() ? "credit" : "debit")">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>@movimiento.Tipo</strong><br>
+                                        <small class="text-muted">@movimiento.Descripcion</small><br>
+                                        <small class="text-muted">@movimiento.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <h6 class="mb-0 @(movimiento.EsCredito() ? "text-success" : "text-danger")">
+                                            @(movimiento.EsCredito() ? "+" : "-")$@movimiento.Monto.ToString("N0")
+                                        </h6>
+                                        <small class="text-muted">Saldo: $@movimiento.SaldoNuevo.ToString("N0")</small>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-4 text-muted">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>No hay movimientos registrados aún.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Incluir todos los modales -->
+<partial name="_ConsultarSaldoModal" />
+<partial name="_ConsignarModal" />
+<partial name="_RetirarModal" />
+<partial name="_TransferirModal" />
+<partial name="_MovimientosModal" />
+<partial name="_ComprasCuotasModal" />
+
+@section Scripts {
+    <script src="~/js/transacciones.js"></script>
+}

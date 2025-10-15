@@ -1,0 +1,159 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Mi Plata - Sistema Bancario";
+}
+
+<div class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="display-4 text-white mb-4">
+                <i class="fas fa-university me-3"></i>
+                Bienvenido a <strong>Mi Plata</strong>
+            </h1>
+            <p class="lead text-white mb-5">
+                Tu banco de confianza. Maneja tus finanzas de forma segura y sencilla con nuestro sistema bancario integral.
+            </p>
+            <div class="hero-buttons">
+                @if (Model.EstaAutenticado)
+                {
+                    <a asp-page="/Transacciones" class="btn btn-success btn-lg me-3">
+                        <i class="fas fa-credit-card me-2"></i>
+                        Ir a Transacciones
+                    </a>
+                    <span class="text-white">
+                        <i class="fas fa-user me-2"></i>
+                        Bienvenido, @Model.NombreCliente
+                    </span>
+                }
+                else
+                {
+                    <a asp-page="/Login" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Iniciar Sesión
+                    </a>
+                    <a asp-page="/Registro" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Registrarse
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h2 class="text-center mb-5">
+                <i class="fas fa-star text-warning me-2"></i>
+                Nuestros Servicios
+            </h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-piggy-bank"></i>
+                </div>
+                <h3>Cuenta de Ahorros</h3>
+                <p>Guarda tu dinero de forma segura y genera intereses del <strong>1.5% mensual</strong>. Perfecta para alcanzar tus metas financieras.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check text-success me-2"></i>Interés del 1.5% mensual</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Seguridad garantizada</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Sin costos de manejo</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <h3>Cuenta Corriente</h3>
+                <p>Maneja tu dinero diario con total flexibilidad. Incluye <strong>sobregiro del 20%</strong> para emergencias.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check text-success me-2"></i>Transacciones ilimitadas</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Sobregiro del 20%</li>
+                    <li><i class="fas fa-check text-success me-2"></i>Acceso inmediato</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <h3>Tarjeta de Crédito</h3>
+                <p>Compra ahora y paga después. Intereses competitivos según el número de cuotas.</p>
+                <ul class="service-features">
+                    <li><i class="fas fa-check text-success me-2"></i>≤2 cuotas: Sin interés</li>
+                    <li><i class="fas fa-check text-success me-2"></i>≤6 cuotas: 1.9% mensual</li>
+                    <li><i class="fas fa-check text-success me-2"></i>≥7 cuotas: 2.3% mensual</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h2 class="text-white mb-5">
+                    <i class="fas fa-shield-alt me-2"></i>
+                    ¿Por qué elegir Mi Plata?
+                </h2>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3 text-center">
+                <div class="feature-item">
+                    <i class="fas fa-lock fa-3x text-warning mb-3"></i>
+                    <h4 class="text-white">Seguridad</h4>
+                    <p class="text-light">Máxima protección para tus datos y transacciones</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="feature-item">
+                    <i class="fas fa-clock fa-3x text-warning mb-3"></i>
+                    <h4 class="text-white">24/7</h4>
+                    <p class="text-light">Acceso a tu cuenta las 24 horas del día</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt fa-3x text-warning mb-3"></i>
+                    <h4 class="text-white">Fácil de Usar</h4>
+                    <p class="text-light">Interfaz intuitiva y responsive</p>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <div class="feature-item">
+                    <i class="fas fa-headset fa-3x text-warning mb-3"></i>
+                    <h4 class="text-white">Soporte</h4>
+                    <p class="text-light">Atención al cliente especializada</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (!Model.EstaAutenticado)
+{
+    <div class="cta-section">
+        <div class="container text-center">
+            <h2 class="mb-4">¿Listo para comenzar?</h2>
+            <p class="lead mb-4">Únete a miles de clientes que confían en Mi Plata para sus finanzas</p>
+            <a asp-page="/Registro" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-right me-2"></i>
+                Crear mi cuenta ahora
+            </a>
+        </div>
+    </div>
+}

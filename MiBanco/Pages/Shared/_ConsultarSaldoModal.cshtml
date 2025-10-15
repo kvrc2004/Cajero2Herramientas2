@@ -1,0 +1,57 @@
+<!-- Modal para Consultar Saldo -->
+<div class="modal fade" id="consultarSaldoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-search-dollar me-2"></i>
+                    Consultar Saldo
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    @foreach (var cuenta in Model.ClienteLogueado!.Cuentas)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <strong>@cuenta.ObtenerTipoCuenta()</strong>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Número:</strong> @cuenta.NumeroCuenta</p>
+                                    
+                                    @if (cuenta is MiBanco.Models.CuentaAhorros ahorros)
+                                    {
+                                        <p><strong>Saldo:</strong> <span class="text-success">$@ahorros.Saldo.ToString("N2")</span></p>
+                                        <p><strong>Interés proyectado:</strong> $@ahorros.ObtenerInteresesProyectados().ToString("N2")</p>
+                                        <small class="text-muted">Interés del 1.5% mensual</small>
+                                    }
+                                    else if (cuenta is MiBanco.Models.CuentaCorriente corriente)
+                                    {
+                                        <p><strong>Saldo:</strong> <span class="text-success">$@corriente.Saldo.ToString("N2")</span></p>
+                                        <p><strong>Sobregiro usado:</strong> <span class="text-warning">$@corriente.MontoSobregiro.ToString("N2")</span></p>
+                                        <p><strong>Sobregiro disponible:</strong> $@corriente.ObtenerSobregiroDisponible().ToString("N2")</p>
+                                    }
+                                    else if (cuenta is MiBanco.Models.TarjetaCredito tarjeta)
+                                    {
+                                        <p><strong>Límite:</strong> $@tarjeta.LimiteCredito.ToString("N2")</p>
+                                        <p><strong>Disponible:</strong> <span class="text-success">$@tarjeta.CreditoDisponible.ToString("N2")</span></p>
+                                        <p><strong>Deuda:</strong> <span class="text-danger">$@tarjeta.ObtenerDeuda().ToString("N2")</span></p>
+                                    }
+                                    
+                                    <small class="text-muted">
+                                        Creada: @cuenta.FechaCreacion.ToString("dd/MM/yyyy")
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
