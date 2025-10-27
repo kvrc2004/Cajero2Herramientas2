@@ -7,6 +7,15 @@ $(document).ready(function() {
     
     // ===== CONFIGURACIÓN INICIAL =====
     
+    // Configurar CSRF token para todas las peticiones AJAX
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("RequestVerificationToken", $('input[name=__RequestVerificationToken]').val());
+            }
+        }
+    });
+    
     // Función para formatear números como moneda
     function formatCurrency(amount) {
         return new Intl.NumberFormat('es-CO', {
@@ -47,9 +56,6 @@ $(document).ready(function() {
             type: 'POST',
             data: JSON.stringify(datos),
             contentType: 'application/json',
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
             beforeSend: function() {
                 $('#formConsignar button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Procesando...');
             },
@@ -113,9 +119,6 @@ $(document).ready(function() {
             type: 'POST',
             data: JSON.stringify(datos),
             contentType: 'application/json',
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
             beforeSend: function() {
                 $('#formRetirar button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Procesando...');
             },
@@ -206,9 +209,6 @@ $(document).ready(function() {
             type: 'POST',
             data: JSON.stringify(datos),
             contentType: 'application/json',
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
             beforeSend: function() {
                 $('#btnConfirmarTransfer').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Procesando...');
             },
@@ -331,9 +331,6 @@ $(document).ready(function() {
             type: 'POST',
             data: JSON.stringify(datos),
             contentType: 'application/json',
-            headers: {
-                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
-            },
             beforeSend: function() {
                 $('#formComprarCuotas button[type="submit"]').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Procesando...');
             },

@@ -9,6 +9,7 @@ namespace MiBanco.Pages
     /// Página principal de transacciones bancarias
     /// Permite realizar todas las operaciones del cajero automático
     /// </summary>
+    [IgnoreAntiforgeryToken]
     public class TransaccionesModel : AuthPageModel
     {
         public TransaccionesModel(BancoService bancoService) : base(bancoService)
