@@ -103,8 +103,16 @@ namespace MiBanco.Pages
         /// </summary>
         public IActionResult OnPostCambiarClave()
         {
+            Console.WriteLine("DEBUG CAMBIO CLAVE - Método OnPostCambiarClave iniciado");
+            
             var verificacion = VerificarAutenticacion();
-            if (verificacion != null) return verificacion;
+            if (verificacion != null) 
+            {
+                Console.WriteLine("DEBUG CAMBIO CLAVE - Verificación de autenticación falló");
+                return verificacion;
+            }
+            
+            Console.WriteLine("DEBUG CAMBIO CLAVE - Usuario autenticado correctamente");
 
             // Cargar datos actuales del perfil (en caso de error y retorno)
             PerfilViewModel.Id = ClienteLogueado!.Id;
@@ -113,26 +121,46 @@ namespace MiBanco.Pages
             PerfilViewModel.Celular = ClienteLogueado.Celular;
             PerfilViewModel.Usuario = ClienteLogueado.Usuario;
 
+            Console.WriteLine($"DEBUG CAMBIO CLAVE - Datos del formulario:");
+            Console.WriteLine($"  Usuario formulario: {CambioClaveViewModel?.Usuario ?? "NULL"}");
+            Console.WriteLine($"  Clave actual formulario: {(string.IsNullOrEmpty(CambioClaveViewModel?.ClaveActual) ? "VACÍA" : "CON VALOR")}");
+            Console.WriteLine($"  Nueva clave formulario: {(string.IsNullOrEmpty(CambioClaveViewModel?.NuevaClave) ? "VACÍA" : "CON VALOR")}");
+            Console.WriteLine($"  Usuario logueado: {ClienteLogueado.Usuario}");
+            Console.WriteLine($"  Clave actual usuario: {(string.IsNullOrEmpty(ClienteLogueado.Clave) ? "VACÍA" : "CON VALOR")}");
+
             // Validar que el modelo sea válido
             if (!ModelState.IsValid)
             {
+                Console.WriteLine("DEBUG CAMBIO CLAVE - ModelState no es válido:");
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"  Campo: {error.Key}, Errores: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
                 return Page();
             }
+            
+            Console.WriteLine("DEBUG CAMBIO CLAVE - ModelState es válido");
 
             try
             {
+                Console.WriteLine("DEBUG CAMBIO CLAVE - Iniciando validaciones...");
+                
                 // Verificar que el usuario y clave actual sean correctos
-                if (!ClienteLogueado.Usuario.Equals(CambioClaveViewModel.Usuario, StringComparison.OrdinalIgnoreCase))
+                if (!ClienteLogueado.Usuario.Equals(CambioClaveViewModel?.Usuario, StringComparison.OrdinalIgnoreCase))
                 {
-                    CambioClaveViewModel.MensajeError = "El usuario ingresado no coincide con tu usuario actual.";
+                    Console.WriteLine("DEBUG CAMBIO CLAVE - Usuario no coincide");
+                    CambioClaveViewModel!.MensajeError = "El usuario ingresado no coincide con tu usuario actual.";
                     return Page();
                 }
 
-                if (ClienteLogueado.Clave != CambioClaveViewModel.ClaveActual)
+                if (ClienteLogueado.Clave != CambioClaveViewModel?.ClaveActual)
                 {
-                    CambioClaveViewModel.MensajeError = "La clave actual no es correcta.";
+                    Console.WriteLine("DEBUG CAMBIO CLAVE - Clave actual incorrecta");
+                    CambioClaveViewModel!.MensajeError = "La clave actual no es correcta.";
                     return Page();
                 }
+
+                Console.WriteLine("DEBUG CAMBIO CLAVE - Validaciones pasadas, actualizando cliente...");
 
                 // Actualizar la clave
                 var clienteActualizado = new Models.Cliente
@@ -142,33 +170,49 @@ namespace MiBanco.Pages
                     Nombre = ClienteLogueado.Nombre,
                     Celular = ClienteLogueado.Celular,
                     Usuario = ClienteLogueado.Usuario,
-                    Clave = CambioClaveViewModel.NuevaClave
+                    Clave = CambioClaveViewModel!.NuevaClave
                 };
 
+                Console.WriteLine($"DEBUG CAMBIO CLAVE - Llamando ActualizarCliente con nueva clave: {(string.IsNullOrEmpty(clienteActualizado.Clave) ? "VACÍA" : "CON VALOR")}");
+
                 bool actualizado = _bancoService.ActualizarCliente(clienteActualizado);
+                
+                Console.WriteLine($"DEBUG CAMBIO CLAVE - Resultado ActualizarCliente: {actualizado}");
 
                 if (actualizado)
                 {
-                    CambioClaveViewModel.MensajeExito = "Clave cambiada correctamente. La próxima vez que inicies sesión, usa tu nueva clave.";
-                    
-                    // Limpiar formulario después del éxito
-                    CambioClaveViewModel.ClaveActual = "";
-                    CambioClaveViewModel.NuevaClave = "";
-                    CambioClaveViewModel.ConfirmarNuevaClave = "";
-                    
-                    // Actualizar en memoria
-                    ClienteLogueado.Clave = CambioClaveViewModel.NuevaClave;
+                    Console.WriteLine("DEBUG CAMBIO CLAVE - Verificando actualización...");
+                    // IMPORTANTE: Verificar que se actualizó correctamente antes de limpiar
+                    var clienteActualizadoDesdeServicio = _bancoService.ObtenerCliente(ClienteLogueado.Id);
+                    if (clienteActualizadoDesdeServicio != null && clienteActualizadoDesdeServicio.Clave == CambioClaveViewModel!.NuevaClave)
+                    {
+                        Console.WriteLine("DEBUG CAMBIO CLAVE - Verificación exitosa, clave actualizada correctamente");
+                        CambioClaveViewModel.MensajeExito = "Clave cambiada correctamente. La próxima vez que inicies sesión, usa tu nueva clave. ✓ Verificado.";
+                        
+                        // Limpiar formulario después del éxito
+                        CambioClaveViewModel.ClaveActual = "";
+                        CambioClaveViewModel.NuevaClave = "";
+                        CambioClaveViewModel.ConfirmarNuevaClave = "";
+                    }
+                    else
+                    {
+                        Console.WriteLine("DEBUG CAMBIO CLAVE - Error: Verificación falló, clave no se actualizó");
+                        CambioClaveViewModel!.MensajeError = "Error: La clave no se actualizó correctamente en el sistema.";
+                    }
                 }
                 else
                 {
-                    CambioClaveViewModel.MensajeError = "No se pudo cambiar la clave. Intenta nuevamente.";
+                    Console.WriteLine("DEBUG CAMBIO CLAVE - ActualizarCliente retornó false");
+                    CambioClaveViewModel!.MensajeError = "No se pudo cambiar la clave. Intenta nuevamente.";
                 }
             }
             catch (Exception ex)
             {
-                CambioClaveViewModel.MensajeError = "Ocurrió un error al cambiar la clave. Intenta nuevamente.";
+                Console.WriteLine($"DEBUG CAMBIO CLAVE - Excepción: {ex.Message}");
+                CambioClaveViewModel!.MensajeError = "Ocurrió un error al cambiar la clave. Intenta nuevamente.";
             }
 
+            Console.WriteLine("DEBUG CAMBIO CLAVE - Método terminado, retornando página");
             return Page();
         }
     }

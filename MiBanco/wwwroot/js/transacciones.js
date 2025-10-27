@@ -193,16 +193,20 @@ $(document).ready(function() {
         e.preventDefault();
         
         const datos = {
-            CuentaOrigenId: parseInt($('#cuentaOrigen').val()),
+            CuentaId: parseInt($('#cuentaOrigen').val()),
             CuentaDestino: $('#cuentaDestino').val().trim(),
             Monto: parseFloat($('#montoTransferir').val()),
             Descripcion: $('#descripcionTransferir').val() || 'Transferencia'
         };
         
-        if (!datos.CuentaOrigenId || !datos.CuentaDestino || !datos.Monto || datos.Monto <= 0) {
+        console.log('Datos de transferencia:', datos); // Debug
+        
+        if (!datos.CuentaId || !datos.CuentaDestino || !datos.Monto || datos.Monto <= 0) {
             showModalMessage('#resultadoTransferir', 'Por favor completa todos los campos obligatorios.', 'danger');
             return;
         }
+        
+        console.log('Enviando transferencia...'); // Debug
         
         $.ajax({
             url: '/Transacciones?handler=Transferir',
@@ -213,6 +217,7 @@ $(document).ready(function() {
                 $('#btnConfirmarTransfer').prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i>Procesando...');
             },
             success: function(response) {
+                console.log('Respuesta del servidor:', response); // Debug
                 if (response.success) {
                     showModalMessage('#resultadoTransferir', response.message, 'success');
                     $('#formTransferir')[0].reset();
@@ -225,7 +230,8 @@ $(document).ready(function() {
                     showModalMessage('#resultadoTransferir', response.message, 'danger');
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
+                console.error('Error en transferencia:', xhr, status, error); // Debug
                 showModalMessage('#resultadoTransferir', 'Error de conexión. Intenta nuevamente.', 'danger');
             },
             complete: function() {

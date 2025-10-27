@@ -147,14 +147,25 @@ namespace MiBanco.Services
         {
             var cliente = _clientes.FirstOrDefault(c => c.Usuario.Equals(usuario, StringComparison.OrdinalIgnoreCase));
             
+            Console.WriteLine($"DEBUG LOGIN - Usuario: '{usuario}', Clave ingresada: '{clave}'");
+            
             if (cliente == null)
+            {
+                Console.WriteLine("DEBUG LOGIN - Cliente no encontrado");
                 return null;
+            }
+
+            Console.WriteLine($"DEBUG LOGIN - Cliente encontrado. Clave en sistema: '{cliente.Clave}'");
 
             if (cliente.CuentaBloqueada)
+            {
+                Console.WriteLine("DEBUG LOGIN - Cuenta bloqueada");
                 return null;
+            }
 
             if (cliente.VerificarCredenciales(usuario, clave))
             {
+                Console.WriteLine("DEBUG LOGIN - Credenciales correctas");
                 cliente.ReiniciarIntentosLogin();
                 return cliente;
             }
@@ -208,6 +219,12 @@ namespace MiBanco.Services
             if (_clientes.Any(c => c.Id != cliente.Id && c.Usuario.Equals(cliente.Usuario, StringComparison.OrdinalIgnoreCase)))
                 return false;
 
+            // Debug: Verificar valores antes de actualizar
+            Console.WriteLine($"DEBUG - Actualizando cliente ID: {cliente.Id}");
+            Console.WriteLine($"DEBUG - Clave anterior: '{clienteExistente.Clave}'");
+            Console.WriteLine($"DEBUG - Nueva clave: '{cliente.Clave}'");
+            Console.WriteLine($"DEBUG - Clave no es null o empty: {!string.IsNullOrEmpty(cliente.Clave)}");
+
             clienteExistente.Nombre = cliente.Nombre;
             clienteExistente.Celular = cliente.Celular;
             clienteExistente.Usuario = cliente.Usuario;
@@ -216,6 +233,11 @@ namespace MiBanco.Services
             if (!string.IsNullOrEmpty(cliente.Clave))
             {
                 clienteExistente.Clave = cliente.Clave;
+                Console.WriteLine($"DEBUG - Clave actualizada a: '{clienteExistente.Clave}'");
+            }
+            else
+            {
+                Console.WriteLine("DEBUG - No se actualizó la clave (está vacía o null)");
             }
 
             return true;

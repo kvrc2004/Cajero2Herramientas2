@@ -24,7 +24,6 @@ C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\ob
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\scopedcss\projectbundle\MiBanco.bundle.scp.css
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\uzsddwn7uc-jjai18mmjz.gz
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\8ga7ublrxd-61n19gt1b8.gz
-C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\vlm98iqhat-xtxxf3hu2r.gz
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\og2m9igssz-bqjiyaj88i.gz
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\8viuxy0t1u-c2jlpeoesf.gz
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\h3rnhsdux2-erw9l3u2r3.gz
@@ -95,4 +94,5 @@ C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\ob
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\MiBanco.pdb
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\MiBanco.genruntimeconfig.cache
 C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\ref\MiBanco.dll
-C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\phioqvov6v-rggox2k494.gz
+C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\vlm98iqhat-rkxc0yphma.gz
+C:\Users\david\Documents\Herramientas 2\CajeroVS\Cajero2Herramientas2\MiBanco\obj\Debug\net9.0\compressed\phioqvov6v-oc4le4dgba.gz

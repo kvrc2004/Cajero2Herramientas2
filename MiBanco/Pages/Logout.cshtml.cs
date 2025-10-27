@@ -10,12 +10,29 @@ namespace MiBanco.Pages
     {
         public IActionResult OnGet()
         {
+            // Verificar si había una sesión activa
+            bool habiaSession = HttpContext.Session.GetInt32("ClienteId").HasValue;
+            string nombreCliente = HttpContext.Session.GetString("NombreCliente") ?? "Usuario";
+            
             // Limpiar toda la sesión
             HttpContext.Session.Clear();
             
-            TempData["Info"] = "Has cerrado sesión correctamente. ¡Hasta pronto!";
+            if (habiaSession)
+            {
+                TempData["Info"] = $"¡Hasta pronto, {nombreCliente}! Has cerrado sesión correctamente.";
+            }
+            else
+            {
+                TempData["Info"] = "Sesión cerrada.";
+            }
             
             return RedirectToPage("/Index");
+        }
+        
+        public IActionResult OnPost()
+        {
+            // También manejar POST requests si alguien envía un formulario
+            return OnGet();
         }
     }
 }

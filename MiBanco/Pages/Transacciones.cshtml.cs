@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiBanco.Pages.Shared;
 using MiBanco.Services;
 using MiBanco.ViewModels;
+using System.Text.Json;
 
 namespace MiBanco.Pages
 {
@@ -107,24 +108,37 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para transferir dinero
         /// </summary>
-        public IActionResult OnPostTransferir([FromBody] TransferenciaViewModel transferencia)
+        public IActionResult OnPostTransferir([FromBody] OperacionViewModel operacion)
         {
             try
             {
-                if (!ModelState.IsValid || ClienteLogueado == null)
+                if (ClienteLogueado == null)
                 {
-                    return new JsonResult(new { success = false, message = "Datos inválidos" });
+                    return new JsonResult(new { success = false, message = "Sesión no válida" });
+                }
+
+                // Obtener cuenta destino desde la descripción temporalmente
+                // En el frontend, vamos a enviar la información de manera diferente
+                int cuentaOrigenId = operacion.CuentaId;
+                string cuentaDestino = operacion.CuentaDestino ?? "";
+                decimal monto = operacion.Monto;
+                string descripcion = operacion.Descripcion ?? "Transferencia";
+
+                // Validaciones básicas
+                if (cuentaOrigenId <= 0 || string.IsNullOrEmpty(cuentaDestino) || monto <= 0)
+                {
+                    return new JsonResult(new { success = false, message = "Datos inválidos para la transferencia" });
                 }
 
                 bool resultado = _bancoService.RealizarTransferencia(
-                    transferencia.CuentaOrigenId, 
-                    transferencia.CuentaDestino, 
-                    transferencia.Monto, 
-                    transferencia.Descripcion);
+                    cuentaOrigenId, 
+                    cuentaDestino, 
+                    monto, 
+                    descripcion);
 
                 if (resultado)
                 {
-                    var cuentaOrigen = ObtenerCuentaCliente(transferencia.CuentaOrigenId);
+                    var cuentaOrigen = ObtenerCuentaCliente(cuentaOrigenId);
                     return new JsonResult(new { 
                         success = true, 
                         message = $"Transferencia exitosa. Nuevo saldo: ${cuentaOrigen?.Saldo:N2}",
@@ -138,7 +152,7 @@ namespace MiBanco.Pages
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { success = false, message = "Error interno del servidor" });
+                return new JsonResult(new { success = false, message = $"Error: {ex.Message}" });
             }
         }
 

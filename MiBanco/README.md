@@ -237,7 +237,7 @@ Para cualquier consulta o problema:
 
 ## 📄 Licencia
 
-Este proyecto es desarrollado con fines académicos para la materia de **Herramientas de Programación II** - Universidad XYZ.
+Este proyecto es desarrollado con fines académicos para la materia de **Herramientas de Programación II** - Universidad Pascual Bravo.
 
 ---
 
