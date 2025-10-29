@@ -1,0 +1,162 @@
+@page
+@model MiBanco.Pages.RegistroModel
+@{
+    ViewData["Title"] = "Registro - Mi Plata";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>
+                <i class="fas fa-user-plus me-2"></i>
+                Crear Cuenta
+            </h2>
+            <p class="text-muted">Únete a Mi Plata y comienza a manejar tus finanzas</p>
+        </div>
+
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+            
+            @if (!string.IsNullOrEmpty(Model.RegistroViewModel.MensajeError))
+            {
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    @Model.RegistroViewModel.MensajeError
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.RegistroViewModel.MensajeExito))
+            {
+                <div class="alert alert-success" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    @Model.RegistroViewModel.MensajeExito
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RegistroViewModel.Identificacion" class="form-label">
+                        <i class="fas fa-id-card me-1"></i>
+                        Identificación
+                    </label>
+                    <input asp-for="RegistroViewModel.Identificacion" class="form-control" placeholder="Número de documento" />
+                    <span asp-validation-for="RegistroViewModel.Identificacion" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RegistroViewModel.Celular" class="form-label">
+                        <i class="fas fa-mobile-alt me-1"></i>
+                        Celular
+                    </label>
+                    <input asp-for="RegistroViewModel.Celular" class="form-control" placeholder="3001234567" />
+                    <span asp-validation-for="RegistroViewModel.Celular" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RegistroViewModel.Nombre" class="form-label">
+                    <i class="fas fa-user me-1"></i>
+                    Nombre Completo
+                </label>
+                <input asp-for="RegistroViewModel.Nombre" class="form-control" placeholder="Juan Pérez García" />
+                <span asp-validation-for="RegistroViewModel.Nombre" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RegistroViewModel.Usuario" class="form-label">
+                    <i class="fas fa-at me-1"></i>
+                    Usuario
+                </label>
+                <input asp-for="RegistroViewModel.Usuario" class="form-control" placeholder="juan.perez" />
+                <span asp-validation-for="RegistroViewModel.Usuario" class="text-danger"></span>
+                <div class="form-text">Mínimo 3 caracteres. Este será tu usuario para iniciar sesión.</div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RegistroViewModel.Clave" class="form-label">
+                        <i class="fas fa-lock me-1"></i>
+                        Clave
+                    </label>
+                    <input asp-for="RegistroViewModel.Clave" class="form-control" placeholder="Mínimo 6 caracteres" />
+                    <span asp-validation-for="RegistroViewModel.Clave" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="RegistroViewModel.ConfirmarClave" class="form-label">
+                        <i class="fas fa-lock me-1"></i>
+                        Confirmar Clave
+                    </label>
+                    <input asp-for="RegistroViewModel.ConfirmarClave" class="form-control" placeholder="Repite tu clave" />
+                    <span asp-validation-for="RegistroViewModel.ConfirmarClave" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-user-plus me-2"></i>
+                    Crear mi cuenta
+                </button>
+            </div>
+        </form>
+
+        <div class="auth-footer">
+            <hr>
+            <div class="text-center">
+                <p class="mb-2">¿Ya tienes una cuenta?</p>
+                <a asp-page="/Login" class="btn btn-outline-primary">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Iniciar sesión
+                </a>
+            </div>
+            <div class="text-center mt-3">
+                <a asp-page="/Index" class="text-muted">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Volver al inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="info-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="info-card">
+                    <h4 class="text-center mb-4">
+                        <i class="fas fa-gift text-success me-2"></i>
+                        Al registrarte recibirás automáticamente:
+                    </h4>
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="benefit-item">
+                                <i class="fas fa-piggy-bank fa-2x text-primary mb-2"></i>
+                                <h6>Cuenta de Ahorros</h6>
+                                <small class="text-muted">Interés del 1.5% mensual</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="benefit-item">
+                                <i class="fas fa-exchange-alt fa-2x text-info mb-2"></i>
+                                <h6>Cuenta Corriente</h6>
+                                <small class="text-muted">Sobregiro del 20%</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center mb-3">
+                            <div class="benefit-item">
+                                <i class="fas fa-credit-card fa-2x text-success mb-2"></i>
+                                <h6>Tarjeta de Crédito</h6>
+                                <small class="text-muted">Límite inicial $1,000,000</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
