@@ -30,7 +30,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para consignar dinero
         /// </summary>
-        public IActionResult OnPostConsignar([FromBody] OperacionViewModel operacion)
+        public async Task<IActionResult> OnPostConsignar([FromBody] OperacionViewModel operacion)
         {
             try
             {
@@ -39,20 +39,15 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "Datos inválidos" });
                 }
 
-                var cuenta = ObtenerCuentaCliente(operacion.CuentaId);
-                if (cuenta == null)
-                {
-                    return new JsonResult(new { success = false, message = "Cuenta no encontrada" });
-                }
-
-                bool resultado = cuenta.Consignar(operacion.Monto, operacion.Descripcion);
+                bool resultado = await _bancoService.Consignar(operacion.CuentaId, operacion.Monto, operacion.Descripcion);
                 
                 if (resultado)
                 {
+                    var cuenta = await _bancoService.ObtenerCuenta(operacion.CuentaId);
                     return new JsonResult(new { 
                         success = true, 
-                        message = $"Consignación exitosa. Nuevo saldo: ${cuenta.Saldo:N2}",
-                        nuevoSaldo = cuenta.Saldo
+                        message = $"Consignación exitosa. Nuevo saldo: ${cuenta?.Saldo:N2}",
+                        nuevoSaldo = cuenta?.Saldo ?? 0
                     });
                 }
                 else
@@ -69,7 +64,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para retirar dinero
         /// </summary>
-        public IActionResult OnPostRetirar([FromBody] OperacionViewModel operacion)
+        public async Task<IActionResult> OnPostRetirar([FromBody] OperacionViewModel operacion)
         {
             try
             {
@@ -78,20 +73,15 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "Datos inválidos" });
                 }
 
-                var cuenta = ObtenerCuentaCliente(operacion.CuentaId);
-                if (cuenta == null)
-                {
-                    return new JsonResult(new { success = false, message = "Cuenta no encontrada" });
-                }
-
-                bool resultado = cuenta.Retirar(operacion.Monto, operacion.Descripcion);
+                bool resultado = await _bancoService.Retirar(operacion.CuentaId, operacion.Monto, operacion.Descripcion);
                 
                 if (resultado)
                 {
+                    var cuenta = await _bancoService.ObtenerCuenta(operacion.CuentaId);
                     return new JsonResult(new { 
                         success = true, 
-                        message = $"Retiro exitoso. Nuevo saldo: ${cuenta.Saldo:N2}",
-                        nuevoSaldo = cuenta.Saldo
+                        message = $"Retiro exitoso. Nuevo saldo: ${cuenta?.Saldo:N2}",
+                        nuevoSaldo = cuenta?.Saldo ?? 0
                     });
                 }
                 else
@@ -108,7 +98,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para transferir dinero
         /// </summary>
-        public IActionResult OnPostTransferir([FromBody] OperacionViewModel operacion)
+        public async Task<IActionResult> OnPostTransferir([FromBody] OperacionViewModel operacion)
         {
             try
             {
@@ -130,7 +120,7 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "Datos inválidos para la transferencia" });
                 }
 
-                bool resultado = _bancoService.RealizarTransferencia(
+                bool resultado = await _bancoService.RealizarTransferencia(
                     cuentaOrigenId, 
                     cuentaDestino, 
                     monto, 
@@ -138,7 +128,7 @@ namespace MiBanco.Pages
 
                 if (resultado)
                 {
-                    var cuentaOrigen = ObtenerCuentaCliente(cuentaOrigenId);
+                    var cuentaOrigen = await _bancoService.ObtenerCuenta(cuentaOrigenId);
                     return new JsonResult(new { 
                         success = true, 
                         message = $"Transferencia exitosa. Nuevo saldo: ${cuentaOrigen?.Saldo:N2}",
@@ -159,7 +149,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para realizar compras en cuotas con tarjeta de crédito
         /// </summary>
-        public IActionResult OnPostComprarEnCuotas([FromBody] OperacionViewModel operacion)
+        public async Task<IActionResult> OnPostComprarEnCuotas([FromBody] OperacionViewModel operacion)
         {
             try
             {
@@ -168,7 +158,7 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "Datos inválidos" });
                 }
 
-                var cuenta = ObtenerCuentaCliente(operacion.CuentaId);
+                var cuenta = await _bancoService.ObtenerCuenta(operacion.CuentaId);
                 if (cuenta is not Models.TarjetaCredito tarjeta)
                 {
                     return new JsonResult(new { success = false, message = "La cuenta seleccionada no es una tarjeta de crédito" });
@@ -178,6 +168,9 @@ namespace MiBanco.Pages
                 
                 if (resultado)
                 {
+                    // Guardar los movimientos en la base de datos
+                    await _bancoService.ObtenerCuenta(operacion.CuentaId); // Recargar para persistir
+                    
                     decimal pagoMensual = tarjeta.CalcularPagoMensual(operacion.Monto, operacion.NumeroCuotas);
                     return new JsonResult(new { 
                         success = true, 
@@ -200,7 +193,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Operación AJAX para buscar cuenta destino en transferencias
         /// </summary>
-        public IActionResult OnGetBuscarCuenta(string numeroCuenta)
+        public async Task<IActionResult> OnGetBuscarCuenta(string numeroCuenta)
         {
             try
             {
@@ -209,13 +202,13 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "Número de cuenta requerido" });
                 }
 
-                var cuenta = _bancoService.ObtenerCuentaPorNumero(numeroCuenta);
+                var cuenta = await _bancoService.ObtenerCuentaPorNumero(numeroCuenta);
                 if (cuenta == null)
                 {
                     return new JsonResult(new { success = false, message = "Cuenta no encontrada" });
                 }
 
-                var cliente = _bancoService.ObtenerCliente(cuenta.ClienteId);
+                var cliente = await _bancoService.ObtenerCliente(cuenta.ClienteId);
                 return new JsonResult(new { 
                     success = true, 
                     tipoCuenta = cuenta.ObtenerTipoCuenta(),

@@ -33,7 +33,7 @@ namespace MiBanco.Pages
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,7 @@ namespace MiBanco.Pages
                 };
 
                 // Intentar registrar el cliente
-                bool registroExitoso = _bancoService.RegistrarCliente(nuevoCliente);
+                bool registroExitoso = await _bancoService.RegistrarCliente(nuevoCliente);
 
                 if (registroExitoso)
                 {

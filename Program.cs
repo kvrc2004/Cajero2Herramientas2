@@ -1,9 +1,15 @@
+using MiBanco.Data;
 using MiBanco.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+// Configurar DbContext con SQL Server
+builder.Services.AddDbContext<MiBancoDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configurar sesiones para mantener estado del usuario
 builder.Services.AddDistributedMemoryCache();
@@ -14,8 +20,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Registrar el servicio del banco como Singleton
-builder.Services.AddSingleton<BancoService>(provider => BancoService.Instance);
+// Registrar el servicio del banco como Scoped (para usar DbContext)
+builder.Services.AddScoped<BancoService>();
 
 var app = builder.Build();
 

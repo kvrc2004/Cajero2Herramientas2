@@ -48,7 +48,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Maneja la actualización del perfil del usuario
         /// </summary>
-        public IActionResult OnPostActualizarPerfil()
+        public async Task<IActionResult> OnPostActualizarPerfil()
         {
             var verificacion = VerificarAutenticacion();
             if (verificacion != null) return verificacion;
@@ -74,7 +74,7 @@ namespace MiBanco.Pages
                     Clave = "" // No cambiar clave aquí
                 };
 
-                bool actualizado = _bancoService.ActualizarCliente(clienteActualizado);
+                bool actualizado = await _bancoService.ActualizarCliente(clienteActualizado);
 
                 if (actualizado)
                 {
@@ -107,7 +107,7 @@ namespace MiBanco.Pages
         /// <summary>
         /// Maneja el cambio de clave del usuario
         /// </summary>
-        public IActionResult OnPostCambiarClave()
+        public async Task<IActionResult> OnPostCambiarClave()
         {
             Console.WriteLine("DEBUG CAMBIO CLAVE - Método OnPostCambiarClave iniciado");
             
@@ -190,7 +190,7 @@ namespace MiBanco.Pages
 
                 Console.WriteLine($"DEBUG CAMBIO CLAVE - Llamando ActualizarCliente con nueva clave: {(string.IsNullOrEmpty(clienteActualizado.Clave) ? "VACÍA" : "CON VALOR")}");
 
-                bool actualizado = _bancoService.ActualizarCliente(clienteActualizado);
+                bool actualizado = await _bancoService.ActualizarCliente(clienteActualizado);
                 
                 Console.WriteLine($"DEBUG CAMBIO CLAVE - Resultado ActualizarCliente: {actualizado}");
 
@@ -198,7 +198,7 @@ namespace MiBanco.Pages
                 {
                     Console.WriteLine("DEBUG CAMBIO CLAVE - Verificando actualización...");
                     // IMPORTANTE: Verificar que se actualizó correctamente antes de limpiar
-                    var clienteActualizadoDesdeServicio = _bancoService.ObtenerCliente(ClienteLogueado.Id);
+                    var clienteActualizadoDesdeServicio = await _bancoService.ObtenerCliente(ClienteLogueado.Id);
                     if (clienteActualizadoDesdeServicio != null && clienteActualizadoDesdeServicio.Clave == CambioClaveViewModel!.NuevaClave)
                     {
                         Console.WriteLine("DEBUG CAMBIO CLAVE - Verificación exitosa, clave actualizada correctamente");

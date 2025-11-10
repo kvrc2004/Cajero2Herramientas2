@@ -32,7 +32,7 @@ namespace MiBanco.Pages.Shared
                     var clienteId = HttpContext.Session.GetInt32("ClienteId");
                     if (clienteId.HasValue)
                     {
-                        _clienteLogueado = _bancoService.ObtenerCliente(clienteId.Value);
+                        _clienteLogueado = _bancoService.ObtenerCliente(clienteId.Value).GetAwaiter().GetResult();
                     }
                 }
                 return _clienteLogueado;

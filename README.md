@@ -33,49 +33,75 @@
 
 ### Prerrequisitos
 - .NET 9.0 SDK o superior
+- SQL Server 2019+ (Express, Developer o Enterprise)
+- SQL Server Management Studio (SSMS) 18.0+
 - Visual Studio 2022 o Visual Studio Code
 - Git (opcional)
 
 ### Pasos para Ejecutar
 
-1. **Clonar o descargar el proyecto**
-   ```bash
-   # Si tienes Git instalado
-   git clone [URL_DEL_REPOSITORIO]
-   
-   # O simplemente descargar y extraer el ZIP
-   ```
+#### 1️⃣ Clonar el Repositorio
+```bash
+# Si tienes Git instalado
+git clone https://github.com/kvrc2004/Cajero2Herramientas2.git
+cd Cajero2Herramientas2
 
-2. **Abrir el proyecto**
-   ```bash
-   # Navegar al directorio
-   cd MiBanco
-   
-   # Abrir en Visual Studio Code
-   code .
-   
-   # O abrir MiBanco.sln en Visual Studio 2022
-   ```
+# O simplemente descargar y extraer el ZIP
+```
 
-3. **Restaurar dependencias**
-   ```bash
-   dotnet restore
-   ```
+#### 2️⃣ Configurar la Base de Datos
 
-4. **Compilar el proyecto**
-   ```bash
-   dotnet build
-   ```
+**📖 [Instrucciones Completas de Instalación de BD](Database/INSTRUCCIONES_INSTALACION.md)**
 
-5. **Ejecutar la aplicación**
-   ```bash
-   dotnet run
-   ```
+**Resumen Rápido:**
 
-6. **Acceder a la aplicación**
-   - Abrir el navegador web
-   - Ir a `https://localhost:7xxx` (el puerto se mostrará en la terminal)
-   - O hacer clic en el enlace que aparece en la terminal
+1. Abre **SQL Server Management Studio**
+2. Conéctate a tu servidor local (`localhost` o `.\SQLEXPRESS`)
+3. Abre el archivo: `Database/CreateDatabase_MiPlata.sql`
+4. Presiona **F5** para ejecutar
+5. Verifica que se creó la base de datos **MiPlataDB**
+
+**Desde CMD (alternativa):**
+```cmd
+sqlcmd -S localhost -E -i "Database\CreateDatabase_MiPlata.sql"
+```
+
+#### 3️⃣ Configurar la Conexión
+
+Abre `appsettings.json` y ajusta según tu configuración de SQL Server:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=MiPlataDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+}
+```
+
+**Variaciones comunes:**
+- SQL Express: `Server=localhost\\SQLEXPRESS;...`
+- Autenticación SQL: `Server=localhost;Database=MiPlataDB;User Id=tu_usuario;Password=tu_pass;...`
+
+#### 4️⃣ Restaurar Dependencias
+```bash
+cd MiBanco
+dotnet restore
+```
+
+#### 5️⃣ Compilar el Proyecto
+```bash
+dotnet build
+```
+
+#### 6️⃣ Ejecutar la Aplicación
+```bash
+dotnet run
+```
+
+#### 7️⃣ Acceder a la Aplicación
+- Abre el navegador web
+- Navega a: `https://localhost:5001` o el puerto indicado en la terminal
+- ¡Listo para usar!
 
 ---
 
@@ -163,9 +189,20 @@ El usuario de prueba tiene:
 
 - **Backend**: C# ASP.NET Core 9.0
 - **Frontend**: Razor Pages, Bootstrap 5, jQuery
+- **Base de Datos**: SQL Server 2019+ con Entity Framework Core
+- **ORM**: Entity Framework Core 9.0
 - **Estilos**: CSS3 personalizado, Font Awesome
-- **Datos**: Almacenamiento en memoria (Singleton Pattern)
+- **Arquitectura**: Patrón Repository + Service Layer
 - **Validación**: Data Annotations + JavaScript
+
+### 🗄️ Características de la Base de Datos
+
+- **3 Tablas**: Clientes, Cuentas (TPH - Table Per Hierarchy), Movimientos
+- **6 Procedimientos Almacenados**: Operaciones bancarias optimizadas
+- **3 Vistas**: Consultas consolidadas de información
+- **3 Funciones**: Cálculos de intereses y sobregiros
+- **Índices optimizados**: Para búsquedas rápidas
+- **Transaccionalidad**: Operaciones ACID garantizadas
 
 ---
 
@@ -209,7 +246,15 @@ El usuario de prueba tiene:
 El proyecto usa configuración por defecto de ASP.NET Core. No requiere configuración adicional.
 
 ### Base de Datos
-El sistema usa almacenamiento en memoria. Los datos se reinician al reiniciar la aplicación.
+El sistema utiliza **SQL Server** con Entity Framework Core. La base de datos se crea automáticamente ejecutando el script `Database/CreateDatabase_MiPlata.sql`.
+
+**Características:**
+- Persistencia de datos entre sesiones
+- Transacciones ACID
+- Procedimientos almacenados optimizados
+- Consultas eficientes con índices
+
+Ver [Instrucciones de Instalación de BD](Database/INSTRUCCIONES_INSTALACION.md) para más detalles.
 
 ### Logs
 Los errores se muestran en la interfaz. Para desarrollo, revisar la consola del navegador.
@@ -218,8 +263,11 @@ Los errores se muestran en la interfaz. Para desarrollo, revisar la consola del 
 
 ## 📚 Documentación Adicional
 
-- **📋 CHECKLIST_COMPLETO.md**: Lista completa de requisitos cumplidos
-- **🏗️ DiagramaUML.md**: Diagrama de clases y arquitectura POO
+- **📋 [INSTRUCCIONES_INSTALACION.md](Database/INSTRUCCIONES_INSTALACION.md)**: Guía completa para configurar la base de datos
+- **📊 [EXPLICACION_BASE_DATOS.md](Database/EXPLICACION_BASE_DATOS.md)**: Detalles técnicos de la estructura de BD
+- **✅ [CHECKLIST_COMPLETO.md](CHECKLIST_COMPLETO.md)**: Lista completa de requisitos cumplidos
+- **🏗️ [DiagramaUML.md](DiagramaUML.md)**: Diagrama de clases y arquitectura POO
+- **⚙️ [CONFIGURACION_COMPLETADA.md](CONFIGURACION_COMPLETADA.md)**: Documentación de configuración
 - **📂 Estructura**: Código bien documentado con comentarios XML
 
 ---

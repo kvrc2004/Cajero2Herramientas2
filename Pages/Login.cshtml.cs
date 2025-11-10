@@ -32,7 +32,7 @@ namespace MiBanco.Pages
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
@@ -42,7 +42,7 @@ namespace MiBanco.Pages
             try
             {
                 // Intentar autenticar al cliente
-                var cliente = _bancoService.AutenticarCliente(LoginViewModel.Usuario, LoginViewModel.Clave);
+                var cliente = await _bancoService.AutenticarCliente(LoginViewModel.Usuario, LoginViewModel.Clave);
 
                 if (cliente != null)
                 {
@@ -56,7 +56,8 @@ namespace MiBanco.Pages
                 else
                 {
                     // Login fallido - verificar si la cuenta está bloqueada
-                    var clienteExistente = _bancoService.ObtenerTodosLosClientes()
+                    var todosClientes = await _bancoService.ObtenerTodosLosClientes();
+                    var clienteExistente = todosClientes
                         .FirstOrDefault(c => c.Usuario.Equals(LoginViewModel.Usuario, StringComparison.OrdinalIgnoreCase));
 
                     if (clienteExistente != null)
