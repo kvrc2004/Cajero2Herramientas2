@@ -17,85 +17,85 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = MiBanco
 build_property.RootNamespace = MiBanco
-build_property.ProjectDir = C:\Users\david\OneDrive\Documentos\Herramientas 2\MiBanco\
+build_property.ProjectDir = C:\Users\USUARIO\OneDrive\Escritorio\Prueba proyecto\Cajero2Herramientas2\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\david\OneDrive\Documentos\Herramientas 2\MiBanco
+build_property.MSBuildProjectDirectory = C:\Users\USUARIO\OneDrive\Escritorio\Prueba proyecto\Cajero2Herramientas2
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Error.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Index.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Login.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Logout.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Logout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Perfil.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Perfil.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGVyZmlsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Privacy.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Registro.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Registro.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmVnaXN0cm8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_ComprasCuotasModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_ComprasCuotasModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db21wcmFzQ3VvdGFzTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_ConsignarModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_ConsignarModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db25zaWduYXJNb2RhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_ConsultarSaldoModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_ConsultarSaldoModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Db25zdWx0YXJTYWxkb01vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_MovimientosModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_MovimientosModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Nb3ZpbWllbnRvc01vZGFsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_RetirarModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_RetirarModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9SZXRpcmFyTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_TransferirModal.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_TransferirModal.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9UcmFuc2ZlcmlyTW9kYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Transacciones.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Transacciones.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY2Npb25lcy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/_ViewImports.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/_ViewStart.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/david/OneDrive/Documentos/Herramientas 2/MiBanco/Pages/Shared/_Layout.cshtml]
+[C:/Users/USUARIO/OneDrive/Escritorio/Prueba proyecto/Cajero2Herramientas2/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-6fv72f8bj8

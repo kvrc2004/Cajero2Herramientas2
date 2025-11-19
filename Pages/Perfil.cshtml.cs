@@ -50,19 +50,50 @@ namespace MiBanco.Pages
         /// </summary>
         public async Task<IActionResult> OnPostActualizarPerfil()
         {
+            Console.WriteLine("DEBUG PERFIL - Método OnPostActualizarPerfil iniciado");
+            
             var verificacion = VerificarAutenticacion();
-            if (verificacion != null) return verificacion;
+            if (verificacion != null)
+            {
+                Console.WriteLine("DEBUG PERFIL - Verificación de autenticación falló");
+                return verificacion;
+            }
+
+            Console.WriteLine($"DEBUG PERFIL - ClienteLogueado: {ClienteLogueado?.Usuario}");
+            Console.WriteLine($"DEBUG PERFIL - Datos del formulario: Nombre={PerfilViewModel.Nombre}, Celular={PerfilViewModel.Celular}, Usuario={PerfilViewModel.Usuario}");
 
             // Precargar usuario para cambio de clave (en caso de error y retorno)
             CambioClaveViewModel.Usuario = ClienteLogueado!.Usuario;
 
             if (!ModelState.IsValid)
             {
-                return Page();
+                Console.WriteLine("DEBUG PERFIL - ModelState no es válido");
+                foreach (var error in ModelState)
+                {
+                    Console.WriteLine($"  Campo: {error.Key}, Errores: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                }
+                
+                // Limpiar errores que no corresponden al PerfilViewModel
+                var keysToRemove = ModelState.Keys.Where(k => !k.StartsWith("PerfilViewModel.")).ToList();
+                foreach (var key in keysToRemove)
+                {
+                    ModelState.Remove(key);
+                }
+                
+                // Verificar nuevamente después de limpiar
+                if (!ModelState.IsValid)
+                {
+                    Console.WriteLine("DEBUG PERFIL - ModelState sigue inválido después de limpiar");
+                    return Page();
+                }
+                
+                Console.WriteLine("DEBUG PERFIL - ModelState válido después de limpiar");
             }
 
             try
             {
+                Console.WriteLine("DEBUG PERFIL - Creando cliente actualizado");
+                
                 // Crear cliente con datos actualizados
                 var clienteActualizado = new Models.Cliente
                 {
@@ -74,22 +105,33 @@ namespace MiBanco.Pages
                     Clave = "" // No cambiar clave aquí
                 };
 
+                Console.WriteLine($"DEBUG PERFIL - Llamando ActualizarCliente. ID={clienteActualizado.Id}, Nombre={clienteActualizado.Nombre}");
                 bool actualizado = await _bancoService.ActualizarCliente(clienteActualizado);
+                Console.WriteLine($"DEBUG PERFIL - Resultado ActualizarCliente: {actualizado}");
 
                 if (actualizado)
                 {
-                    // Actualizar sesión si cambió el nombre
-                    if (ClienteLogueado.Nombre != clienteActualizado.Nombre)
+                    // Recargar el cliente desde la base de datos para asegurar que tenemos los datos actualizados
+                    var clienteActualizadoDB = await _bancoService.ObtenerCliente(ClienteLogueado.Id);
+                    if (clienteActualizadoDB != null)
                     {
-                        HttpContext.Session.SetString("NombreCliente", clienteActualizado.Nombre);
-                    }
+                        // Actualizar sesión si cambió el nombre
+                        if (clienteActualizadoDB.Nombre != ClienteLogueado.Nombre)
+                        {
+                            HttpContext.Session.SetString("NombreCliente", clienteActualizadoDB.Nombre);
+                        }
 
-                    PerfilViewModel.MensajeExito = "Información actualizada correctamente.";
-                    
-                    // Actualizar los datos en memoria
-                    ClienteLogueado.Nombre = clienteActualizado.Nombre;
-                    ClienteLogueado.Celular = clienteActualizado.Celular;
-                    ClienteLogueado.Usuario = clienteActualizado.Usuario;
+                        PerfilViewModel.MensajeExito = "Información actualizada correctamente.";
+                        
+                        // Actualizar los datos en memoria con los datos de la base de datos
+                        ClienteLogueado.Nombre = clienteActualizadoDB.Nombre;
+                        ClienteLogueado.Celular = clienteActualizadoDB.Celular;
+                        ClienteLogueado.Usuario = clienteActualizadoDB.Usuario;
+                    }
+                    else
+                    {
+                        PerfilViewModel.MensajeError = "Error al verificar la actualización.";
+                    }
                 }
                 else
                 {
@@ -160,18 +202,33 @@ namespace MiBanco.Pages
             {
                 Console.WriteLine("DEBUG CAMBIO CLAVE - Iniciando validaciones...");
                 
+                // Obtener el cliente actualizado desde la base de datos
+                var clienteActualDB = await _bancoService.ObtenerCliente(ClienteLogueado.Id);
+                if (clienteActualDB == null)
+                {
+                    CambioClaveViewModel!.MensajeError = "Error al obtener los datos del cliente.";
+                    return Page();
+                }
+                
                 // Verificar que el usuario y clave actual sean correctos
-                if (!ClienteLogueado.Usuario.Equals(CambioClaveViewModel?.Usuario, StringComparison.OrdinalIgnoreCase))
+                if (!clienteActualDB.Usuario.Equals(CambioClaveViewModel?.Usuario, StringComparison.OrdinalIgnoreCase))
                 {
                     Console.WriteLine("DEBUG CAMBIO CLAVE - Usuario no coincide");
                     CambioClaveViewModel!.MensajeError = "El usuario ingresado no coincide con tu usuario actual.";
                     return Page();
                 }
 
-                if (ClienteLogueado.Clave != CambioClaveViewModel?.ClaveActual)
+                // Validar que la clave actual sea correcta
+                if (clienteActualDB.Clave != CambioClaveViewModel?.ClaveActual)
                 {
-                    Console.WriteLine("DEBUG CAMBIO CLAVE - Clave actual incorrecta");
-                    CambioClaveViewModel!.MensajeError = "La clave actual no es correcta.";
+                    Console.WriteLine($"DEBUG CAMBIO CLAVE - Clave actual incorrecta. Esperada: '{clienteActualDB.Clave}', Recibida: '{CambioClaveViewModel?.ClaveActual}'");
+                    CambioClaveViewModel!.MensajeError = "⚠️ La clave actual no es correcta. Por favor, verifica e intenta nuevamente.";
+                    
+                    // Limpiar los campos de clave
+                    CambioClaveViewModel.ClaveActual = "";
+                    CambioClaveViewModel.NuevaClave = "";
+                    CambioClaveViewModel.ConfirmarNuevaClave = "";
+                    
                     return Page();
                 }
 

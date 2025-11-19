@@ -225,4 +225,18 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        // Activar la pestaña "Cambiar Clave" si hay un error o mensaje de éxito en el cambio de clave
+        @if (!string.IsNullOrEmpty(Model.CambioClaveViewModel.MensajeError) || !string.IsNullOrEmpty(Model.CambioClaveViewModel.MensajeExito))
+        {
+            <text>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Activar la pestaña de Cambiar Clave
+                var claveTab = new bootstrap.Tab(document.getElementById('clave-tab'));
+                claveTab.show();
+            });
+            </text>
+        }
+    </script>
 }

@@ -21,9 +21,11 @@ namespace MiBanco.Services
             if (await _context.Clientes.AnyAsync(c => c.Identificacion == cliente.Identificacion))
                 return false;
 
+            // Agregar el cliente a la base de datos
             _context.Clientes.Add(cliente);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(); // Esto genera el Id del cliente
 
+            // Ahora crear las cuentas con el Id del cliente ya generado
             await CrearCuentasIniciales(cliente);
 
             return true;
@@ -33,21 +35,34 @@ namespace MiBanco.Services
         {
             int siguienteNumero = await _context.Cuentas.CountAsync() + 1;
 
-            var cuentaAhorros = new CuentaAhorros($"AH{siguienteNumero:000000}", cliente.Id)
+            // Crear cuenta de ahorros
+            var cuentaAhorros = new CuentaAhorros
             {
-                Saldo = 0
+                NumeroCuenta = $"AH{siguienteNumero:000000}",
+                ClienteId = cliente.Id,
+                Saldo = 0,
+                FechaCreacion = DateTime.Now
             };
             siguienteNumero++;
 
-            var cuentaCorriente = new CuentaCorriente($"CC{siguienteNumero:000000}", cliente.Id)
+            // Crear cuenta corriente
+            var cuentaCorriente = new CuentaCorriente
             {
-                Saldo = 0
+                NumeroCuenta = $"CC{siguienteNumero:000000}",
+                ClienteId = cliente.Id,
+                Saldo = 0,
+                FechaCreacion = DateTime.Now
             };
             siguienteNumero++;
 
-            var tarjetaCredito = new TarjetaCredito($"TC{siguienteNumero:000000}", cliente.Id, 1000000)
+            // Crear tarjeta de crédito
+            var tarjetaCredito = new TarjetaCredito
             {
-                LimiteCredito = 1000000
+                NumeroCuenta = $"TC{siguienteNumero:000000}",
+                ClienteId = cliente.Id,
+                Saldo = 0,
+                LimiteCredito = 1000000,
+                FechaCreacion = DateTime.Now
             };
 
             _context.Cuentas.AddRange(new Cuenta[] { cuentaAhorros, cuentaCorriente, tarjetaCredito });
@@ -101,23 +116,49 @@ namespace MiBanco.Services
 
         public async Task<bool> ActualizarCliente(Cliente cliente)
         {
-            var clienteExistente = await _context.Clientes.FindAsync(cliente.Id);
+            Console.WriteLine($"DEBUG ActualizarCliente - Inicio. ClienteId: {cliente.Id}");
+            Console.WriteLine($"DEBUG ActualizarCliente - Datos a actualizar: Nombre={cliente.Nombre}, Celular={cliente.Celular}, Usuario={cliente.Usuario}, Clave={(!string.IsNullOrEmpty(cliente.Clave) ? "CON VALOR" : "VACÍA")}");
+            
+            // Recargar el cliente desde la base de datos para asegurar que tenemos la versión más reciente
+            var clienteExistente = await _context.Clientes
+                .FirstOrDefaultAsync(c => c.Id == cliente.Id);
+            
             if (clienteExistente == null)
+            {
+                Console.WriteLine("DEBUG ActualizarCliente - Cliente no encontrado");
                 return false;
+            }
 
+            Console.WriteLine($"DEBUG ActualizarCliente - Cliente encontrado: Nombre={clienteExistente.Nombre}, Celular={clienteExistente.Celular}, Usuario={clienteExistente.Usuario}, Clave={clienteExistente.Clave}");
+
+            // Verificar si el usuario ya existe para otro cliente
             if (await _context.Clientes.AnyAsync(c => c.Id != cliente.Id && c.Usuario.ToLower() == cliente.Usuario.ToLower()))
+            {
+                Console.WriteLine("DEBUG ActualizarCliente - Usuario ya existe para otro cliente");
                 return false;
+            }
 
+            // Actualizar los campos
             clienteExistente.Nombre = cliente.Nombre;
             clienteExistente.Celular = cliente.Celular;
             clienteExistente.Usuario = cliente.Usuario;
 
+            Console.WriteLine($"DEBUG ActualizarCliente - Campos actualizados: Nombre={clienteExistente.Nombre}, Celular={clienteExistente.Celular}, Usuario={clienteExistente.Usuario}");
+
+            // Solo actualizar la clave si se proporcionó una nueva
             if (!string.IsNullOrEmpty(cliente.Clave))
             {
+                Console.WriteLine($"DEBUG ActualizarCliente - Actualizando clave de '{clienteExistente.Clave}' a '{cliente.Clave}'");
                 clienteExistente.Clave = cliente.Clave;
             }
 
-            await _context.SaveChangesAsync();
+            // Marcar como modificado y guardar los cambios
+            _context.Clientes.Update(clienteExistente);
+            Console.WriteLine("DEBUG ActualizarCliente - Cliente marcado como modificado");
+            
+            var cambios = await _context.SaveChangesAsync();
+            Console.WriteLine($"DEBUG ActualizarCliente - SaveChangesAsync ejecutado. Cambios guardados: {cambios}");
+            
             return true;
         }
 
@@ -201,6 +242,22 @@ namespace MiBanco.Services
             };
 
             return resumen;
+        }
+
+        public async Task<bool> ComprarEnCuotas(int cuentaId, decimal monto, int numeroCuotas, string descripcion = "Compra en cuotas")
+        {
+            var cuenta = await ObtenerCuenta(cuentaId);
+            if (cuenta is not TarjetaCredito tarjeta) return false;
+
+            var resultado = tarjeta.RealizarCompraEnCuotas(monto, numeroCuotas, descripcion);
+
+            if (resultado)
+            {
+                _context.Movimientos.AddRange(tarjeta.Movimientos.Where(m => m.Id == 0));
+                await _context.SaveChangesAsync();
+            }
+
+            return resultado;
         }
     }
 }

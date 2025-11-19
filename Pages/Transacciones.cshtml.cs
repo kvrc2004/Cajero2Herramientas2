@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MiBanco.Pages.Shared;
 using MiBanco.Services;
 using MiBanco.ViewModels;
+using MiBanco.Data;
 using System.Text.Json;
 
 namespace MiBanco.Pages
@@ -13,8 +14,11 @@ namespace MiBanco.Pages
     [IgnoreAntiforgeryToken]
     public class TransaccionesModel : AuthPageModel
     {
-        public TransaccionesModel(BancoService bancoService) : base(bancoService)
+        private readonly MiBancoDbContext _context;
+
+        public TransaccionesModel(BancoService bancoService, MiBancoDbContext context) : base(bancoService)
         {
+            _context = context;
         }
 
         public IActionResult OnGet()
@@ -164,14 +168,14 @@ namespace MiBanco.Pages
                     return new JsonResult(new { success = false, message = "La cuenta seleccionada no es una tarjeta de crédito" });
                 }
 
-                bool resultado = tarjeta.RealizarCompraEnCuotas(operacion.Monto, operacion.NumeroCuotas, operacion.Descripcion);
+                bool resultado = await _bancoService.ComprarEnCuotas(operacion.CuentaId, operacion.Monto, operacion.NumeroCuotas, operacion.Descripcion);
                 
                 if (resultado)
                 {
-                    // Guardar los movimientos en la base de datos
-                    await _bancoService.ObtenerCuenta(operacion.CuentaId); // Recargar para persistir
+                    // Recalcular después de guardar en la BD
+                    tarjeta = await _bancoService.ObtenerCuenta(operacion.CuentaId) as Models.TarjetaCredito;
+                    decimal pagoMensual = tarjeta!.CalcularPagoMensual(operacion.Monto, operacion.NumeroCuotas);
                     
-                    decimal pagoMensual = tarjeta.CalcularPagoMensual(operacion.Monto, operacion.NumeroCuotas);
                     return new JsonResult(new { 
                         success = true, 
                         message = $"Compra exitosa en {operacion.NumeroCuotas} cuotas. Pago mensual: ${pagoMensual:N2}",

@@ -265,12 +265,24 @@ Los errores se muestran en la interfaz. Para desarrollo, revisar la consola del 
 
 ## 📚 Documentación Adicional
 
-- **📋 [INSTRUCCIONES_INSTALACION.md](Database/INSTRUCCIONES_INSTALACION.md)**: Guía completa para configurar la base de datos
-- **📊 [EXPLICACION_BASE_DATOS.md](Database/EXPLICACION_BASE_DATOS.md)**: Detalles técnicos de la estructura de BD
-- **✅ [CHECKLIST_COMPLETO.md](CHECKLIST_COMPLETO.md)**: Lista completa de requisitos cumplidos
-- **🏗️ [DiagramaUML.md](DiagramaUML.md)**: Diagrama de clases y arquitectura POO
-- **⚙️ [CONFIGURACION_COMPLETADA.md](CONFIGURACION_COMPLETADA.md)**: Documentación de configuración
-- **📂 Estructura**: Código bien documentado con comentarios XML
+Toda la documentación del proyecto está organizada en la carpeta **`Documentacion/`**:
+
+### 🗂️ Documentación Base de Datos
+- **📋 [INSTRUCCIONES_INSTALACION.md](Documentacion/INSTRUCCIONES_INSTALACION.md)**: Guía completa para configurar la base de datos
+- **📊 [EXPLICACION_BASE_DATOS.md](Documentacion/EXPLICACION_BASE_DATOS.md)**: Detalles técnicos de la estructura de BD
+- **💾 [COMPARTIR_DATOS.md](Documentacion/COMPARTIR_DATOS.md)**: Cómo compartir datos entre desarrolladores
+- **📝 [CAMBIOS_BASE_DATOS.md](Documentacion/CAMBIOS_BASE_DATOS.md)**: Registro completo de cambios en la BD
+
+### 📋 Documentación del Proyecto
+- **✅ [CHECKLIST_COMPLETO.md](Documentacion/CHECKLIST_COMPLETO.md)**: Lista completa de requisitos cumplidos
+- **✅ [CHECKLIST_PROYECTO_FINAL.md](Documentacion/CHECKLIST_PROYECTO_FINAL.md)**: Evaluación final del proyecto
+- **🏗️ [DiagramaUML.md](Documentacion/DiagramaUML.md)**: Diagrama de clases y arquitectura POO
+- **⚙️ [CONFIGURACION_COMPLETADA.md](Documentacion/CONFIGURACION_COMPLETADA.md)**: Documentación de configuración
+
+### 📊 Reportes y Resúmenes
+- **📈 [RESUMEN_FINAL_PROYECTO.md](Documentacion/RESUMEN_FINAL_PROYECTO.md)**: Resumen ejecutivo del proyecto
+- **📄 [REPORTE_TRABAJO_COMPLETADO.md](Documentacion/REPORTE_TRABAJO_COMPLETADO.md)**: Reporte detallado de trabajo
+- **🤝 [GUIA_COLABORACION.md](Documentacion/GUIA_COLABORACION.md)**: Guía para colaboradores
 
 ---
 

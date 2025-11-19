@@ -14,4 +14,12 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Excluir carpeta MiBanco para evitar duplicados -->
+    <Compile Remove="MiBanco\**" />
+    <Content Remove="MiBanco\**" />
+    <EmbeddedResource Remove="MiBanco\**" />
+    <None Remove="MiBanco\**" />
+  </ItemGroup>
+
 </Project>
