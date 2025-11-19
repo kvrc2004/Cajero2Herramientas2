@@ -1,0 +1,95 @@
+<!-- Contenido del archivo index.html -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Bancario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>Banco Futuro Seguro</h1>
+    <nav>
+        <a href="#servicios">Servicios</a>
+        <a href="acerca.html">Acerca de</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="login.html">Iniciar Sesión</a>
+        <a href="registro.html">Registrarse</a>
+    </nav>
+    <div id="usuario-info" style="position:absolute;top:32px;right:32px;display:flex;flex-direction:column;align-items:end;gap:8px;"></div>
+</header>
+
+<div class="main-content">
+    <section id="servicios">
+        <h2>Nuestros Servicios</h2>
+        <div class="card">
+            <h3>Ahorros</h3>
+            <p>Planes de ahorro adaptados a tus necesidades.</p>
+            <a href="#" class="button">Más información</a>
+        </div>
+        <div class="card">
+            <h3>Créditos</h3>
+            <p>Obtén el crédito que necesitas de forma rápida y sencilla.</p>
+            <a href="#" class="button">Más información</a>
+        </div>
+        <div class="card">
+            <h3>Inversiones</h3>
+            <p>Haz crecer tu dinero con nuestros planes de inversión.</p>
+            <a href="#" class="button">Más información</a>
+        </div>
+    </section>
+
+    <section id="acerca">
+        <h2>Acerca de Nosotros</h2>
+        <p>Somos un banco comprometido con el bienestar financiero de nuestros clientes.</p>
+        <a href="acerca.html" class="button">Conoce más</a>
+    </section>
+
+    <section id="contacto">
+        <h2>Contacto</h2>
+        <p>¿Tienes alguna pregunta? ¡Contáctanos!</p>
+        <a href="contacto.html" class="button">Escríbenos</a>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2023 Proyecto Bancario. Todos los derechos reservados.</p>
+    <div>
+        Síguenos:
+        <a href="https://facebook.com/proyectobancario" target="_blank" title="Facebook">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/facebook.svg" alt="Facebook" style="width:24px;vertical-align:middle;">
+        </a>
+        <a href="https://twitter.com/proyectobancario" target="_blank" title="Twitter">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/twitter.svg" alt="Twitter" style="width:24px;vertical-align:middle;">
+        </a>
+        <a href="https://instagram.com/proyectobancario" target="_blank" title="Instagram">
+            <img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/instagram.svg" alt="Instagram" style="width:24px;vertical-align:middle;">
+        </a>
+    </div>
+</footer>
+
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    const usuario = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
+    if (usuario) {
+        const infoDiv = document.getElementById('usuario-info');
+        infoDiv.innerHTML = `
+            <div style="display:flex;align-items:center;gap:8px;">
+                <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombre)}&background=2e86de&color=fff&size=32" alt="Avatar" style="border-radius:50%;">
+                <span style="font-weight:600;color:#2e86de;">${usuario.nombre}</span>
+            </div>
+            <button id="cerrar-sesion" class="button" style="padding:6px 16px;font-size:0.95rem;margin-top:4px;">Cerrar sesión</button>
+        `;
+        document.getElementById('cerrar-sesion').onclick = function() {
+            localStorage.removeItem('usuarioLogueado');
+            window.location.reload();
+        };
+    }
+});
+</script>
+
+</body>
+</html>

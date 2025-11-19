@@ -1,0 +1,65 @@
+<!-- Modal para Consignar Dinero -->
+<div class="modal fade" id="consignarModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-plus-circle me-2"></i>
+                    Consignar Dinero
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="formConsignar">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-university me-1"></i>
+                            Cuenta destino
+                        </label>
+                        <select class="form-select" id="cuentaConsignar" required>
+                            <option value="">Selecciona una cuenta</option>
+                            @foreach (var cuenta in Model.ClienteLogueado!.Cuentas)
+                            {
+                                @if (!(cuenta is MiBanco.Models.TarjetaCredito))
+                                {
+                                    <option value="@cuenta.Id">
+                                        @cuenta.ObtenerTipoCuenta() - @cuenta.NumeroCuenta 
+                                        (Saldo: $@cuenta.Saldo.ToString("N0"))
+                                    </option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-dollar-sign me-1"></i>
+                            Monto a consignar
+                        </label>
+                        <input type="number" class="form-control" id="montoConsignar" 
+                               min="1" step="0.01" placeholder="0.00" required>
+                        <div class="form-text">Monto mínimo: $1</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            <i class="fas fa-comment me-1"></i>
+                            Descripción (opcional)
+                        </label>
+                        <input type="text" class="form-control" id="descripcionConsignar" 
+                               placeholder="Descripción de la consignación" maxlength="200">
+                    </div>
+                    
+                    <div id="resultadoConsignar" class="alert" style="display: none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>
+                        Consignar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
